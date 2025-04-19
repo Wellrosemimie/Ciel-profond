@@ -11,7 +11,7 @@ const deepSkyObjects = [
     info: "La galaxie d'Andromède est la plus proche de la Voie lactée.",
     direction: "nord-est",
     months: ["août", "septembre", "octobre"],
-    hours: ["22h", "2h"]
+    hours: ["22", "2"]
   },
   {
     name: "M42",
@@ -23,7 +23,7 @@ const deepSkyObjects = [
     info: "Nébuleuse d'Orion, région active de formation d'étoiles.",
     direction: "sud-est",
     months: ["décembre", "janvier", "février"],
-    hours: ["21h", "3h"]
+    hours: ["21", "3"]
   }
 ];
 
@@ -34,14 +34,14 @@ export default function App() {
 
   useEffect(() => {
     const now = new Date();
-    const month = now.toLocaleString("fr-FR", { month: "long" });
+    const month = now.toLocaleString("fr-FR", { month: "long" }).toLowerCase();
     const hour = now.getHours();
 
-    const visible = deepSkyObjects.filter(obj =>
-      obj.months.includes(month.toLowerCase()) &&
-      hour >= parseInt(obj.hours[0]) &&
-      hour <= parseInt(obj.hours[1])
-    );
+    const visible = deepSkyObjects.filter(obj => {
+      return obj.months?.includes(month) &&
+             hour >= parseInt(obj.hours[0]) &&
+             hour <= parseInt(obj.hours[1]);
+    });
     setVisibleNow(visible.map(v => v.name));
   }, []);
 
@@ -85,7 +85,7 @@ export default function App() {
           <p><strong>Constellation :</strong> {obj.constellation}</p>
           <p><strong>Filtre :</strong> {obj.filter}</p>
           <p><strong>Direction :</strong> {obj.direction}</p>
-          <p><strong>Observation idéale :</strong> {obj.months.join(", ")} entre {obj.hours[0]} et {obj.hours[1]}</p>
+          <p><strong>Observation idéale :</strong> {(obj.months || []).join(", ")} entre {obj.hours?.[0]}h et {obj.hours?.[1]}h</p>
           <p><strong>Temps de pose :</strong> {obj.exposure}</p>
           <p>{obj.info}</p>
 
@@ -133,3 +133,5 @@ export default function App() {
   );
 }
 Cmd + S
+
+
