@@ -38,9 +38,15 @@ export default function App() {
     const hour = now.getHours();
 
     const visible = deepSkyObjects.filter(obj => {
-      return obj.months?.includes(month) &&
-             hour >= parseInt(obj.hours[0]) &&
-             hour <= parseInt(obj.hours[1]);
+      const start = parseInt(obj.hours?.[0]);
+      const end = parseInt(obj.hours?.[1]);
+      return (
+        Array.isArray(obj.months) &&
+        obj.months.includes(month) &&
+        !isNaN(start) &&
+        !isNaN(end) &&
+        hour >= start && hour <= end
+      );
     });
     setVisibleNow(visible.map(v => v.name));
   }, []);
@@ -133,5 +139,3 @@ export default function App() {
   );
 }
 Cmd + S
-
-
